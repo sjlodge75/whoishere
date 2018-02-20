@@ -1,6 +1,6 @@
 
 import json
-import urllib as ur
+import urllib.request as ur
 
 READ_API_KEY='F4OA1IJI4U0BMH3E'
 CHANNEL_ID='420847'
