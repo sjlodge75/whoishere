@@ -8,8 +8,8 @@ def main():
                            % (CHANNEL_ID,READ_API_KEY))
     response = conn.read()
     data=json.loads(response)
-    print data['field2'] #Works in command line. Try 'return' for web
-    #return data['field2']
+    #print data['field2'] #Works in command line. Try 'return' for web
+    return data['field2']
     conn.close()
 if __name__ == '__main__':
     main()
