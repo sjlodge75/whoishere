@@ -1,1 +1,1 @@
-web: python whoishere.py runserver 0.0.0.0:5000
+web: python whoishere.py
