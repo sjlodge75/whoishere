@@ -7,7 +7,7 @@ def main():
                            % (CHANNEL_ID,READ_API_KEY))
     response = conn.read()
     data=json.loads(response)
-    print data['field2']
+    print print(int data['field2'])
     conn.close()
 if __name__ == '__main__':
     main()
