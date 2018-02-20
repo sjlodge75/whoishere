@@ -8,8 +8,8 @@ def main():
     conn = urllib2.urlopen("http://api.thingspeak.com/channels/" + CHANNEL_ID + "/feeds/last.json?api_key=" + READ_API_KEY)
     response = conn.read()
     data=json.loads(response)
-    #print data['field2'] #Works in command line. Try 'return' for web
-    return data['field2']
+    print data['field2'] #print works fine when tested in IDLE. Try 'return' when hosted online
+    #return data['field2']
     conn.close()
 if __name__ == '__main__':
     main()
