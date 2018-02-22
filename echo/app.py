@@ -21,7 +21,7 @@ def handle_echo_intent(request):
     data=json.loads(response)
     print (data['field2']) #print works fine when tested in IDLE.
     conn.close()
-	return PlainTextSpeech(request.slots.get('message', data['field2']))
+    return PlainTextSpeech(request.slots.get('message', data['field2']))
 
 
 if __name__ == '__main__':
