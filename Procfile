@@ -1,2 +1,1 @@
-
-web: gunicorn new.new:new --log-file -
+web: gunicorn new:app --log-file -
