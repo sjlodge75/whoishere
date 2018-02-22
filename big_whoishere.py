@@ -1,13 +1,7 @@
-from __future__ import print_function
-import urllib2, json
+import urllib2,json
 
-# Change these elements to point to your data
 READ_API_KEY='F4OA1IJI4U0BMH3E'
-channel = '420847'
-field = '2'
-#
-
-link = "https://api.thingspeak.com/channels/" + str(channel) + "/fields/" + str(field) + "/last.json?api_key=" +str(READ_API_KEY)
+CHANNEL_ID='420847'
 
 def lambda_handler(event, context):
     """ Route the incoming request based on type (LaunchRequest, IntentRequest,
@@ -46,17 +40,34 @@ def on_launch(launch_request, session):
     return get_welcome_response()
 
 
-def on_intent(intent_request, session):
-    """ Called when the user specifies an intent for this skill """
+def main():
+    conn = urllib2.urlopen("http://api.thingspeak.com/channels/" + CHANNEL_ID + "/feeds/last.json?api_key=" + READ_API_KEY)
+    response = conn.read()
+    data=json.loads(response)
+    print data['field2'] #print works fine when tested in IDLE, and outputs to gthe Heroku log
+    conn.close()
+	
+#if __name__ == '__main__':
+#    main()
+	
+def get_welcome_response():
 
-    print("on_intent requestId=" + intent_request['requestId'] +
+    session_attributes = {}
+    card_title = "Welcome"
+    speech_output = "Jon, Liz and Phil are here in the house"
+    should_end_session = True
+    return build_response(session_attributes, build_speechlet_response(
+ card_title, speech_output, None, should_end_session))
+
+ def on_intent(intent_request, session):
+     print("on_intent requestId=" + intent_request['requestId'] +
           ", sessionId=" + session['sessionId'])
 
     intent = intent_request['intent']
     intent_name = intent_request['intent']['name']
 
     # Dispatch to your skill's intent handlers
-    if intent_name == "SpeedTestIntent":
+    if intent_name == "WhoIsInTheHouse":
         return run_speed_test(intent, session, link)
     elif intent_name == "AMAZON.HelpIntent":
         return get_welcome_response()
@@ -99,7 +110,7 @@ def handle_session_end_request():
         card_title, speech_output, None, should_end_session))
 
 # Run the Speed Test
-def run_speed_test(intent, session, link):
+def run_thingspeak(intent, session, link):
     session_attributes = {}
     reprompt_text = None
     should_end_session = False
@@ -142,3 +153,5 @@ def build_response(session_attributes, speechlet_response):
         'sessionAttributes': session_attributes,
         'response': speechlet_response
     }
+
+ 
