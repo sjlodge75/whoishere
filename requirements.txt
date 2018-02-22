@@ -1,5 +1,7 @@
-Flask==0.8
-cryptography # necessary to enable openssl on heroku
-pylexa==1.0.0
+cryptography # necessary to deploy to heroku
+
+flask
+
 gunicorn
-requests
+
+pylexa==1.0.0
