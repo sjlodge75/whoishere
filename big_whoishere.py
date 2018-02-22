@@ -24,7 +24,7 @@ def lambda_handler(event, context):
 
 def on_session_started(session_started_request, session):
     """ Called when the session starts """
-
+    print("Started")
     print("on_session_started requestId=" + session_started_request['requestId']
           + ", sessionId=" + session['sessionId'])
 
@@ -33,7 +33,7 @@ def on_launch(launch_request, session):
     """ Called when the user launches the skill without specifying what they
     want
     """
-
+    print("Launch")
     print("on_launch requestId=" + launch_request['requestId'] +
           ", sessionId=" + session['sessionId'])
     # Dispatch to your skill's launch
@@ -41,7 +41,7 @@ def on_launch(launch_request, session):
 
 
 def get_welcome_response():
-
+    print("WelcomeResponse")
     session_attributes = {}
     card_title = "Welcome"
     speech_output = "Jon, Liz and Phil are here in the house"
@@ -50,21 +50,22 @@ def get_welcome_response():
  card_title, speech_output, None, should_end_session))
 
 def on_intent(intent_request, session):
-     print("on_intent requestId=" + intent_request['requestId'] +
+    print("onIntent")
+    print("on_intent requestId=" + intent_request['requestId'] +
           ", sessionId=" + session['sessionId'])
 
-     intent = intent_request['intent']
-     intent_name = intent_request['intent']['name']
+    intent = intent_request['intent']
+    intent_name = intent_request['intent']['name']
 
-     # Dispatch to your skill's intent handlers
-     if intent_name == "WhoIsInTheHouse":
-         return run_speed_test(intent, session, link)
-     elif intent_name == "AMAZON.HelpIntent":
-         return get_welcome_response()
-     elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent":
-         return handle_session_end_request()
-     else:
-         raise ValueError("Invalid intent")
+    # Dispatch to your skill's intent handlers
+    if intent_name == "WhoIsInTheHouse":
+        return run_thingspeak(intent, session, link)
+    elif intent_name == "AMAZON.HelpIntent":
+        return get_welcome_response()
+    elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent":
+        return handle_session_end_request()
+    else:
+        raise ValueError("Invalid intent")
 
 def on_session_ended(session_ended_request, session):
     """ Called when the user ends the session.
@@ -77,7 +78,7 @@ def on_session_ended(session_ended_request, session):
 # --------------- Functions that control the skill's behavior ------------------
 
 def get_welcome_response():
-    print("Welcome")
+    print("getWelcome")
     session_attributes = {}
     card_title = "Welcome"
     speech_output = "Welcome. " \
@@ -99,7 +100,7 @@ def handle_session_end_request():
     return build_response({}, build_speechlet_response(
         card_title, speech_output, None, should_end_session))
 
-# Run the Speed Test
+# Run the Thingspeak connection and reply
 def run_thingspeak(intent, session, link):
     print("RunThingspeak")
     session_attributes = {}
@@ -108,9 +109,7 @@ def run_thingspeak(intent, session, link):
     
     f = urllib2.urlopen(link) # Get your data
     result = f.read()
-    
-    speech_output = result
-                    
+    speech_output = result       
        
     return build_response(session_attributes, build_speechlet_response(
         intent['name'], speech_output, reprompt_text, should_end_session))
