@@ -40,16 +40,6 @@ def on_launch(launch_request, session):
     return get_welcome_response()
 
 
-def main():
-    conn = urllib2.urlopen("http://api.thingspeak.com/channels/" + CHANNEL_ID + "/feeds/last.json?api_key=" + READ_API_KEY)
-    response = conn.read()
-    data=json.loads(response)
-    print data['field2'] #print works fine when tested in IDLE, and outputs to gthe Heroku log
-    conn.close()
-	
-#if __name__ == '__main__':
-#    main()
-	
 def get_welcome_response():
 
     session_attributes = {}
@@ -87,7 +77,7 @@ def on_session_ended(session_ended_request, session):
 # --------------- Functions that control the skill's behavior ------------------
 
 def get_welcome_response():
-
+    print("Welcome")
     session_attributes = {}
     card_title = "Welcome"
     speech_output = "Welcome. " \
@@ -101,6 +91,7 @@ def get_welcome_response():
         card_title, speech_output, reprompt_text, should_end_session))
 
 def handle_session_end_request():
+    print("SessionEnded")
     card_title = "Session Ended"
     speech_output = "I hope you haven't lost anyone."
     # Setting this to true ends the session and exits the skill.
@@ -110,6 +101,7 @@ def handle_session_end_request():
 
 # Run the Speed Test
 def run_thingspeak(intent, session, link):
+    print("RunThingspeak")
     session_attributes = {}
     reprompt_text = None
     should_end_session = False
