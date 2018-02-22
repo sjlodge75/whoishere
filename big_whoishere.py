@@ -2,6 +2,34 @@ import urllib2,json
 
 READ_API_KEY='F4OA1IJI4U0BMH3E'
 CHANNEL_ID='420847'
+# --------------- Helpers that build all of the responses ----------------------
+
+def build_speechlet_response(title, output, reprompt_text, should_end_session):
+    return {
+        'outputSpeech': {
+            'type': 'PlainText',
+            'text': output
+        },
+        'card': {
+            'type': 'Simple',
+            'title': 'SessionSpeechlet - ' + title,
+            'content': 'SessionSpeechlet - ' + output
+        },
+        'reprompt': {
+           'outputSpeech': {
+                'type': 'PlainText',
+                'text': reprompt_text
+            }
+        },
+        'shouldEndSession': should_end_session
+    }
+
+
+def build_response(speechlet_response):
+    return {
+        'version': '1.0',
+        'response': speechlet_response
+    }
 
 def lambda_handler(event, context):
     """ Route the incoming request based on type (LaunchRequest, IntentRequest,
@@ -46,7 +74,7 @@ def get_welcome_response():
     card_title = "Welcome"
     speech_output = "Jon, Liz and Phil are here in the house"
     should_end_session = True
-    return build_response(session_attributes, build_speechlet_response(
+    return build_response(build_speechlet_response(
  card_title, speech_output, None, should_end_session))
 
 def on_intent(intent_request, session):
@@ -77,20 +105,6 @@ def on_session_ended(session_ended_request, session):
 
 # --------------- Functions that control the skill's behavior ------------------
 
-def get_welcome_response():
-    print("getWelcome")
-    session_attributes = {}
-    card_title = "Welcome"
-    speech_output = "Welcome. " \
-                    "I can tell you who is in your house " \
-                    "Just ask me to check."
-    # If the user either does not reply to the welcome message or says something
-    # that is not understood, they will be prompted again with this text.
-    reprompt_text = "Ask me, who is in the house. "
-    should_end_session = False
-    return build_response(session_attributes, build_speechlet_response(
-        card_title, speech_output, reprompt_text, should_end_session))
-
 def handle_session_end_request():
     print("SessionEnded")
     card_title = "Session Ended"
@@ -111,37 +125,25 @@ def run_thingspeak(intent, session, link):
     result = f.read()
     speech_output = result       
        
-    return build_response(session_attributes, build_speechlet_response(
+    return build_response(build_speechlet_response(
         intent['name'], speech_output, reprompt_text, should_end_session))
 
-# --------------- Helpers that build all of the responses ----------------------
 
-def build_speechlet_response(title, output, reprompt_text, should_end_session):
-    return {
-        'outputSpeech': {
-            'type': 'PlainText',
-            'text': output
-        },
-        'card': {
-            'type': 'Simple',
-            'title': 'SessionSpeechlet - ' + title,
-            'content': 'SessionSpeechlet - ' + output
-        },
-        'reprompt': {
-           'outputSpeech': {
-                'type': 'PlainText',
-                'text': reprompt_text
-            }
-        },
-        'shouldEndSession': should_end_session
-    }
+def main():
+    conn = urllib2.urlopen("http://api.thingspeak.com/channels/" + CHANNEL_ID + "/feeds/last.json?api_key=" + READ_API_KEY)
+    response = conn.read()
+    data=json.loads(response)
+    print data['field2'] #print works fine when tested in IDLE. Try 'return' when hosted online
+    speech_output = data['field2']
+    conn.close()
+    return build_response(build_speechlet_response('Welcome',
+        speech_output, 'AskMe', should_end_session))
 
+if __name__ == '__main__':
+    main()
+    speech_output = result       
+       
+    
 
-def build_response(session_attributes, speechlet_response):
-    return {
-        'version': '1.0',
-        'sessionAttributes': session_attributes,
-        'response': speechlet_response
-    }
 
  
