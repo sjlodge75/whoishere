@@ -5,6 +5,7 @@ from pylexa.app import alexa_blueprint
 from pylexa.intent import handle_intent
 from pylexa.response import PlainTextSpeech
 
+import urllib2,json
 
 app = Flask(__name__)
 app.config['app_id'] = 'amzn1.ask.skill.858f0ecb-96b1-436c-9ce6-01f5e3fef821'
