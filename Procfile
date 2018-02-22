@@ -1,1 +1,1 @@
-web: python big_whoishere.py
+web: python new.py
