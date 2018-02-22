@@ -59,23 +59,22 @@ def get_welcome_response():
     return build_response(session_attributes, build_speechlet_response(
  card_title, speech_output, None, should_end_session))
 
- def on_intent(intent_request, session):
+def on_intent(intent_request, session):
      print("on_intent requestId=" + intent_request['requestId'] +
           ", sessionId=" + session['sessionId'])
 
-    intent = intent_request['intent']
-    intent_name = intent_request['intent']['name']
+     intent = intent_request['intent']
+     intent_name = intent_request['intent']['name']
 
-    # Dispatch to your skill's intent handlers
-    if intent_name == "WhoIsInTheHouse":
-        return run_speed_test(intent, session, link)
-    elif intent_name == "AMAZON.HelpIntent":
-        return get_welcome_response()
-    elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent":
-        return handle_session_end_request()
-    else:
-        raise ValueError("Invalid intent")
-
+     # Dispatch to your skill's intent handlers
+     if intent_name == "WhoIsInTheHouse":
+         return run_speed_test(intent, session, link)
+     elif intent_name == "AMAZON.HelpIntent":
+         return get_welcome_response()
+     elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent":
+         return handle_session_end_request()
+     else:
+         raise ValueError("Invalid intent")
 
 def on_session_ended(session_ended_request, session):
     """ Called when the user ends the session.
