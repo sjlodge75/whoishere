@@ -1,1 +1,2 @@
-web: python new.py
+
+web: gunicorn new:app --log-file -
