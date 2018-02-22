@@ -13,7 +13,7 @@ app.register_blueprint(alexa_blueprint)
 
 @handle_intent('WhoIsInTheHouse')
 def handle_WhoIsInTheHouse_intent(request):
-conn = urllib2.urlopen("http://api.thingspeak.com/channels/" + CHANNEL_ID + "/feeds/last.json?api_key=" + READ_API_KEY)
+    conn = urllib2.urlopen("http://api.thingspeak.com/channels/" + CHANNEL_ID + "/feeds/last.json?api_key=" + READ_API_KEY)
     response = conn.read()
     data=json.loads(response)
     print (data['field2']) #print works fine when tested in IDLE.
