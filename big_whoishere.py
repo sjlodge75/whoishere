@@ -137,11 +137,11 @@ def main():
     speech_output = data['field2']
     conn.close()
     return build_response(build_speechlet_response('Welcome',
-        speech_output, 'AskMe', should_end_session))
+        speech_output, 'AskMe', 'should_end_session'))
 
 if __name__ == '__main__':
     main()
-    speech_output = result       
+       
        
     
 
