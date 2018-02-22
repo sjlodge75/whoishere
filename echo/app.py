@@ -7,6 +7,8 @@ from pylexa.app import alexa_blueprint
 from pylexa.intent import handle_intent
 from pylexa.response import PlainTextSpeech
 
+READ_API_KEY='F4OA1IJI4U0BMH3E'
+CHANNEL_ID='420847'
 
 app = Flask(__name__)
 app.config['app_id'] = os.getenv('ALEXA_APP_ID')
