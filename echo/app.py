@@ -13,7 +13,7 @@ app.config['app_id'] = os.getenv('ALEXA_APP_ID')
 app.register_blueprint(alexa_blueprint)
 
 
-@handle_intent('Echo')
+@handle_intent('WhoIsInTheHouse')
 def handle_echo_intent(request):
     print(request)
     return PlainTextSpeech(request.slots.get('message', 'Nothing to echo'))
